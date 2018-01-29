@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Including Bootstrap 4-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <!-- -->
+</head>
+<body>
+    <!-- UI using bootstrap 4-->
+    <div class="conatiner-fluid">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8"><br>
+                To change the object and its path, change variables (objectName,path) at line number 69 and 77 respectively.
+                <br><br>
+                Result:<br><br>
+                <div id="result" class="card">
+                    <!-- Result will be printed here -->
+                </div>
+            </div>
+            <div class="col-md-2">
+            </div>
+        </div>
+    </div>
+</body>
+<script>            //Script at the end so that page can load faste        
+    /*******Function Definition Starts Here*******/
+    var getObjPath= (objName,objProp)=>{
+        let flag=false; // Flag for returning value that is,either null or retrieved value  
+        if("object"==typeof(objName))  //To check if passed argument is an object or not
+        {
+            let a_path=objProp.split(".");      //Generates array of objProp by splitting them at '.'
+            //console.log("array"+a_path);
+            let o_temp=new Object(objName);     //Creating temp object so that nested objects properties can be checked
+            let obj_value=null;     //Final value to be returned 
+            for(let count=0;count<a_path.length;count++){ //For loop is used to check the condition for nested objects and its properties
+                if(o_temp.hasOwnProperty(a_path[count])){ //checking if property exists or not
+                    if((count+1)==(a_path.length))
+                    {  
+                        o_value=o_temp[a_path[count]];   //Final value to be returned by the function
+                    }
+                    else{
+                        
+                        o_temp= new Object(o_temp[a_path[count]]);  //Creating temp object of nested object if and only if nested object is present 
+                    }
+                }
+                else{
+                    flag=true;
+                }
+            }
+        }
+        else{
+            flag=true;
+        }
+        if(!flag){
+                return o_value;  //Returns final value if all conditions are met as per requirement
+        }
+        else{
+            return null; //Returns null if condition is not matched
+        }
+    };
+    /******* Function Definition Ends Here *******/
+   
+    // Variables for passing as an argument to the function getObjPath
+    let objectName = {
+        name: "Rajesh",
+        address : {
+                locality : {
+                    street : "2nd main domlur"
+                }
+        }
+    }
+    path="address.locality.street";        
+    /*
+    #############################Call function here########################
+    */
+    let objValue=null;
+    objValue=getObjPath(objectName,path);   //*********************Function Calling***********************
+    if(objValue)
+        $("#result").append("<span style='color:red'>"+objValue+"</span>");
+    else
+        $("#result").append("Function returned null value <span style='color:red'> Make sure path for object is correct.</span>");
+
+</script>
+</html>
